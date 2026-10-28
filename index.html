@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="测测你的ABO属性，解锁你的专属信息素。15道温柔小问题，找到最像你的那一面。">
+<title>测测你的ABO属性｜解锁你的专属信息素</title>
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Noto+Serif+SC:wght@500;600;700&family=Noto+Sans+SC:wght@300;400;500;600&display=swap">
+<style>
+  /* ============ 基础 ============ */
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  :root {
+    --bg: #F1EAE0;
+    --surface: #FFFFFF;
+    --ink: #4A3B2F;
+    --ink-soft: #8A7A6A;
+    --ink-faint: #B3A28F;
+    --accent: #A9835F;
+    --accent-deep: #8F6C48;
+    --line: #E5DACC;
+    --chip-bg: #F5EEE4;
+    --serif: "Noto Serif SC", "Songti SC", "STSong", "SimSun", serif;
+    --sans: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", "Helvetica Neue", sans-serif;
+    --safe-top: env(safe-area-inset-top, 0px);
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  html, body { height: 100%; }
+  body {
+    font-family: var(--sans);
+    color: var(--ink);
+    background: #E4DACA;
+    -webkit-font-smoothing: antialiased;
+    overscroll-behavior: none;
+  }
+  /* 手机壳容器：桌面预览时居中成手机竖版 */
+  .app {
+    position: relative;
+    width: 100%;
+    max-width: 430px;
+    min-height: 100vh;
+    min-height: 100dvh;
+    margin: 0 auto;
+    background: var(--bg);
+    overflow: hidden;
+    box-shadow: 0 0 40px rgba(74, 59, 47, 0.08);
+  }
+  @media (min-width: 431px) {
+    .app { min-height: 100dvh; }
+  }
+
+  /* ============ 视图切换 ============ */
+  .view {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    padding: calc(28px + var(--safe-top)) 24px calc(24px + var(--safe-bottom));
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(16px);
+    transition: opacity .45s ease, transform .45s ease, visibility .45s;
+    overflow-y: auto;
+    scrollbar-width: none;
+  }
+  .view::-webkit-scrollbar { display: none; }
+  .view.active { opacity: 1; visibility: visible; transform: none; }
+
+  /* ============ 封面首页 ============ */
+  .cover-wrap {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding-bottom: 6vh;
+  }
+  .cover-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    letter-spacing: 2px;
+    color: var(--accent-deep);
+    background: #F4EADD;
+    border: 1px solid #E7D7C2;
+    padding: 7px 16px;
+    border-radius: 999px;
+    margin-bottom: 28px;
+  }
+  .cover-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+  .cover-hero {
+    width: min(72vw, 300px);
+    aspect-ratio: 1;
+    border-radius: 32px;
+    object-fit: cover;
+    box-shadow: 0 18px 40px rgba(143, 108, 72, 0.18);
+    margin-bottom: 34px;
+    animation: floaty 5s ease-in-out infinite;
+  }
+  @keyframes floaty {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+  .cover-title {
+    font-family: var(--serif);
+    font-weight: 700;
+    font-size: 34px;
+    line-height: 1.3;
+    letter-spacing: 2px;
+    color: var(--ink);
+  }
+  .cover-title em {
+    font-style: normal;
+    color: var(--accent-deep);
+  }
+  .cover-sub {
+    margin-top: 10px;
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: 16px;
+    letter-spacing: 4px;
+    color: var(--ink-soft);
+  }
+  .cover-desc {
+    margin-top: 26px;
+    font-size: 13px;
+    line-height: 1.9;
+    color: var(--ink-soft);
+    letter-spacing: 1px;
+  }
+  .cover-desc span { color: var(--accent-deep); font-weight: 500; }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    height: 54px;
+    padding: 0 44px;
+    border: none;
+    border-radius: 999px;
+    font-family: var(--sans);
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: 4px;
+    color: #FFFDF9;
+    background: linear-gradient(135deg, #B5916A, var(--accent));
+    box-shadow: 0 12px 24px rgba(143, 108, 72, 0.28);
+    cursor: pointer;
+    transition: transform .25s ease, box-shadow .25s ease, opacity .25s ease;
+  }
+  .btn:active { transform: scale(.96); box-shadow: 0 6px 14px rgba(143, 108, 72, 0.22); }
+  .btn.btn-block { width: 100%; }
+  .cover-start { margin-top: 34px; }
+  .cover-note {
+    margin-top: 18px;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--ink-faint);
+  }
+
+  /* ============ 答题页 ============ */
+  .quiz-head {
+    flex-shrink: 0;
+    padding-bottom: 18px;
+  }
+  .quiz-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+    font-size: 12px;
+    letter-spacing: 2px;
+    color: var(--ink-soft);
+  }
+  .quiz-meta .count { font-family: var(--serif); font-weight: 600; font-size: 14px; color: var(--accent-deep); }
+  .progress-track {
+    height: 6px;
+    border-radius: 999px;
+    background: #E7DCCB;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    width: 0%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #C5A583, var(--accent));
+    transition: width .5s cubic-bezier(.4, 0, .2, 1);
+  }
+  .quiz-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 0;
+    padding: 10px 0 6px;
+  }
+  .q-card { width: 100%; }
+  .q-card.leaving { animation: qOut .22s ease forwards; }
+  .q-card.entering { animation: qIn .42s cubic-bezier(.22, .8, .3, 1); }
+  @keyframes qIn {
+    from { opacity: 0; transform: translateX(30px); }
+    to { opacity: 1; transform: none; }
+  }
+  @keyframes qOut {
+    from { opacity: 1; transform: none; }
+    to { opacity: 0; transform: translateX(-30px); }
+  }
+  .q-no {
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: 13px;
+    letter-spacing: 3px;
+    color: var(--accent-deep);
+    margin-bottom: 14px;
+  }
+  .q-text {
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: 22px;
+    line-height: 1.55;
+    color: var(--ink);
+    margin-bottom: 30px;
+  }
+  .q-options {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .q-opt {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    width: 100%;
+    text-align: left;
+    padding: 16px 18px;
+    border-radius: 18px;
+    border: 1.5px solid var(--line);
+    background: var(--surface);
+    font-family: var(--sans);
+    font-size: 14.5px;
+    line-height: 1.6;
+    color: var(--ink);
+    cursor: pointer;
+    transition: border-color .25s ease, background .25s ease, transform .2s ease, box-shadow .25s ease;
+    min-height: 56px;
+  }
+  .q-opt:active { transform: scale(.985); }
+  .q-opt .key {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    margin-top: 1px;
+    border-radius: 50%;
+    border: 1.5px solid var(--ink-faint);
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--ink-soft);
+    transition: all .25s ease;
+  }
+  .q-opt.selected {
+    border-color: var(--accent);
+    background: #F7EFE4;
+    box-shadow: 0 8px 18px rgba(143, 108, 72, 0.12);
+  }
+  .q-opt.selected .key {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #FFFDF9;
+  }
+  .quiz-foot {
+    flex-shrink: 0;
+    padding-top: 22px;
+  }
+  .btn[disabled] { opacity: .45; pointer-events: none; box-shadow: none; }
+
+  /* ============ 结果页 ============ */
+  .result-wrap { display: flex; flex-direction: column; align-items: center; text-align: center; }
+  .result-tag {
+    font-size: 12px;
+    letter-spacing: 3px;
+    color: var(--ink-soft);
+    margin-bottom: 12px;
+  }
+  .result-name {
+    font-family: var(--serif);
+    font-weight: 700;
+    font-size: 34px;
+    letter-spacing: 3px;
+    color: var(--ink);
+  }
+  .result-en {
+    margin-top: 6px;
+    font-size: 12px;
+    letter-spacing: 5px;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+  }
+  .result-img {
+    width: min(58vw, 232px);
+    aspect-ratio: 1;
+    border-radius: 28px;
+    object-fit: cover;
+    box-shadow: 0 16px 36px rgba(74, 59, 47, 0.16);
+    margin: 24px 0;
+  }
+  .phe-card {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 18px;
+    border-radius: 20px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    text-align: left;
+    margin-bottom: 22px;
+  }
+  .phe-icon {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+  }
+  .phe-icon svg { width: 22px; height: 22px; }
+  .phe-label { font-size: 11px; letter-spacing: 2px; color: var(--ink-soft); margin-bottom: 3px; }
+  .phe-name { font-family: var(--serif); font-weight: 600; font-size: 19px; letter-spacing: 2px; }
+  .result-copy {
+    width: 100%;
+    text-align: left;
+    font-size: 14.5px;
+    line-height: 2;
+    color: var(--ink);
+    background: var(--surface);
+    border-radius: 20px;
+    padding: 20px 22px;
+    border: 1px solid var(--line);
+    margin-bottom: 16px;
+  }
+  .r-section { width: 100%; text-align: left; margin-bottom: 16px; }
+  .r-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: 2px;
+    color: var(--ink);
+    margin-bottom: 12px;
+  }
+  .r-title svg { width: 17px; height: 17px; }
+  .chip-row { display: flex; flex-wrap: wrap; gap: 10px; }
+  .chip {
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 13px;
+    letter-spacing: 1px;
+    background: var(--chip-bg);
+    color: var(--ink);
+  }
+  .r-line {
+    font-size: 14px;
+    line-height: 1.9;
+    color: var(--ink);
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 16px 20px;
+  }
+  /* 答案分布 */
+  .dist-card {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    padding: 18px 20px;
+    margin-bottom: 20px;
+  }
+  .dist-title {
+    font-size: 12px;
+    letter-spacing: 2px;
+    color: var(--ink-soft);
+    margin-bottom: 14px;
+    text-align: left;
+  }
+  .dist-row { display: flex; align-items: center; gap: 10px; margin-bottom: 9px; }
+  .dist-row:last-child { margin-bottom: 0; }
+  .dist-label { flex-shrink: 0; width: 64px; font-size: 12.5px; color: var(--ink); }
+  .dist-track { flex: 1; height: 8px; border-radius: 999px; background: #EFE7DB; overflow: hidden; }
+  .dist-fill { height: 100%; border-radius: 999px; transition: width .8s cubic-bezier(.4, 0, .2, 1); }
+  .dist-num { flex-shrink: 0; width: 34px; text-align: right; font-size: 12.5px; color: var(--ink-soft); }
+  .result-actions { width: 100%; margin-top: 8px; padding-bottom: 8px; }
+  .btn-ghost {
+    margin-top: 14px;
+    width: 100%;
+    height: 52px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border-radius: 999px;
+    border: 1.5px solid var(--line);
+    background: transparent;
+    font-family: var(--sans);
+    font-size: 15px;
+    letter-spacing: 3px;
+    color: var(--ink-soft);
+    cursor: pointer;
+    transition: all .25s ease;
+  }
+  .btn-ghost:active { transform: scale(.97); background: #F6EFE4; }
+  .btn-ghost svg { width: 16px; height: 16px; }
+  .result-note {
+    margin-top: 16px;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--ink-faint);
+  }
+
+  /* ============ 结果主题色 ============ */
+  .r-alpha   { --rt-accent: #7E9686; --rt-deep: #4F6757; --rt-tint: #E6EBE3; }
+  .r-galpha  { --rt-accent: #A3936F; --rt-deep: #6F5F41; --rt-tint: #ECE6D8; }
+  .r-beta    { --rt-accent: #9AAE93; --rt-deep: #5E7355; --rt-tint: #E7EBE2; }
+  .r-omega   { --rt-accent: #D9A290; --rt-deep: #A36B55; --rt-tint: #F5E7DF; }
+  .phe-icon { background: var(--rt-tint); color: var(--rt-deep); }
+  .result-name { color: var(--rt-deep); }
+  .result-en { color: var(--rt-accent); }
+  .r-title svg { color: var(--rt-accent); }
+  .result-tag span { color: var(--rt-accent); }
+</style>
+</head>
+<body>
+<div class="app" id="app">
+
+  <!-- ===== 视图：封面首页 ===== -->
+  <section class="view" data-route="cover">
+    <div class="cover-wrap">
+      <div class="cover-badge"><span class="dot"></span>ABO 人格测试</div>
+      <img class="cover-hero" src="https://aka.doubaocdn.com/s/1wPHqYvVSK" alt="香水瓶插画">
+      <h1 class="cover-title">测测你的<em>ABO</em>属性</h1>
+      <p class="cover-sub">解锁你的专属信息素</p>
+      <p class="cover-desc">15 道温柔小问题 · 凭直觉作答<br>没有对错，只有<span>更接近你的那一面</span></p>
+      <button class="btn cover-start" id="btnStart">开始测试</button>
+      <p class="cover-note">结果仅供娱乐参考</p>
+    </div>
+  </section>
+
+  <!-- ===== 视图：答题页 ===== -->
+  <section class="view" data-route="quiz">
+    <header class="quiz-head">
+      <div class="quiz-meta">
+        <span>ABO 属性测试</span>
+        <span class="count" id="quizCount">01 / 15</span>
+      </div>
+      <div class="progress-track"><div class="progress-fill" id="quizProgress"></div></div>
+    </header>
+    <div class="quiz-body" id="quizBody"></div>
+    <footer class="quiz-foot">
+      <button class="btn btn-block" id="btnNext" disabled>下一题</button>
+    </footer>
+  </section>
+
+  <!-- ===== 视图：结果页 ===== -->
+  <section class="view" data-route="result">
+    <div class="result-wrap" id="resultWrap"></div>
+  </section>
+
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ============ 题库（A=Alpha B=温和Alpha C=Beta D=Omega） ============ */
+  var QUESTIONS = [
+    { q: '面对一个重要决定时，你通常会？', options: [
+      { t: 'A', text: '很快拍板，相信自己的判断，干脆利落地推进' },
+      { t: 'B', text: '把大家的感受都考虑进去，再给出稳妥的方案' },
+      { t: 'C', text: '不急不躁，权衡利弊后保持中立' },
+      { t: 'D', text: '会犹豫很久，想听听信任的人怎么说' } ] },
+    { q: '朋友遇到烦心事向你倾诉，你的第一反应是？', options: [
+      { t: 'A', text: '帮 ta 梳理问题，直接给出建议和办法' },
+      { t: 'B', text: '温柔地安抚 ta，陪着一起想办法' },
+      { t: 'C', text: '安静听完、安静陪着，就让人很安心' },
+      { t: 'D', text: '感同身受，比 ta 还心疼' } ] },
+    { q: '你理想中的社交状态是？', options: [
+      { t: 'A', text: '我是大家的主心骨，喜欢把朋友们聚在一起' },
+      { t: 'B', text: '身边有一群熟悉的朋友，被需要的感觉很棒' },
+      { t: 'C', text: '三五好友偶尔相聚，平时各自安好' },
+      { t: 'D', text: '享受和少数亲密的人深度相处' } ] },
+    { q: '以下哪种气息最让你安心？', options: [
+      { t: 'A', text: '雪后松林的清冽气息，干净又有力量' },
+      { t: 'B', text: '雨后森林里柏木的温润气息' },
+      { t: 'C', text: '一杯白茶的清雅香气，平和淡然' },
+      { t: 'D', text: '白桃茉莉的甜软果香，温柔治愈' } ] },
+    { q: '压力大到喘不过气时，你的第一反应是？', options: [
+      { t: 'A', text: '越挫越勇，直接迎上去把问题解决掉' },
+      { t: 'B', text: '先稳住自己，按步骤一点点把事情做完' },
+      { t: 'C', text: '抽离一会儿，给自己留一点独处空间' },
+      { t: 'D', text: '想找人倾诉，被安慰一下才能缓过来' } ] },
+    { q: '在亲密关系里，你更偏向哪种相处？', options: [
+      { t: 'A', text: '由我来安排和保护，希望对方依赖我' },
+      { t: 'B', text: '彼此照顾，也保留各自的空间和原则' },
+      { t: 'C', text: '独立又默契，各自忙完再分享日常' },
+      { t: 'D', text: '想时刻黏在一起，不断确认被爱着' } ] },
+    { q: '被误解的时候，你通常会？', options: [
+      { t: 'A', text: '立刻澄清，坚定维护自己的立场' },
+      { t: 'B', text: '耐心解释，相信误会总会解开' },
+      { t: 'C', text: '不太在意，觉得清者自清' },
+      { t: 'D', text: '心里悄悄难过，很久都放不下' } ] },
+    { q: '在一段关系中，你更像哪种角色？', options: [
+      { t: 'A', text: '领航者，负责把方向定下来' },
+      { t: 'B', text: '同行者，温柔而坚定地陪着走' },
+      { t: 'C', text: '守望者，安静稳定地待在身边' },
+      { t: 'D', text: '心动者，用全部的柔软去爱' } ] },
+    { q: '你最欣赏哪种品质？', options: [
+      { t: 'A', text: '果断勇敢，敢想敢做' },
+      { t: 'B', text: '温柔坚定，柔中带刚' },
+      { t: 'C', text: '平和理性，情绪稳定' },
+      { t: 'D', text: '细腻感性，共情力强' } ] },
+    { q: '点餐或购物时，你通常是？', options: [
+      { t: 'A', text: '很快决定，干脆利落' },
+      { t: 'B', text: '综合大家的口味和需求来选' },
+      { t: 'C', text: '凭习惯随缘，简单就好' },
+      { t: 'D', text: '纠结很久，想选最满意的那一个' } ] },
+    { q: '你希望自己在别人眼里是？', options: [
+      { t: 'A', text: '有气场、有担当的人' },
+      { t: 'B', text: '可靠又温柔、让人安心的人' },
+      { t: 'C', text: '舒服自在、很好相处的人' },
+      { t: 'D', text: '细腻浪漫、想让人靠近的人' } ] },
+    { q: '集体活动需要有人牵头时，你会？', options: [
+      { t: 'A', text: '主动站出来组织大家' },
+      { t: 'B', text: '在大家需要时第一个帮忙' },
+      { t: 'C', text: '配合安排，做好自己的部分' },
+      { t: 'D', text: '默默跟随，不抢风头' } ] },
+    { q: '你理解的「安全感」是？', options: [
+      { t: 'A', text: '掌控感，事情都在自己手里' },
+      { t: 'B', text: '被信任、被需要的感觉' },
+      { t: 'C', text: '稳定不变的生活节奏' },
+      { t: 'D', text: '被偏爱、被坚定选择的感觉' } ] },
+    { q: '你的能量更多来自？', options: [
+      { t: 'A', text: '达成目标时的成就感' },
+      { t: 'B', text: '帮助别人、被需要时的满足' },
+      { t: 'C', text: '规律安稳的日常带来的踏实' },
+      { t: 'D', text: '被爱意包围时的幸福感' } ] },
+    { q: '如果只能选一句话形容自己？', options: [
+      { t: 'A', text: '我的人生，由我决定' },
+      { t: 'B', text: '温柔，就是我的力量' },
+      { t: 'C', text: '平平淡淡，认真生活' },
+      { t: 'D', text: '心里住着一片柔软的海' } ] }
+  ];
+
+  /* ============ 结果设定 ============ */
+  var RESULTS = {
+    A: {
+      cls: 'r-alpha', en: 'Alpha', name: 'Alpha',
+      pheromone: '冷雪松', img: 'https://aka.doubaocdn.com/s/soIJzwt0mi',
+      copy: '你天生自带清冽的气场，像冬日雪松，挺拔而坚定。你习惯主导局面、保护身边人，骨子里写着「我来」。靠近你的人，会不自觉地被你的笃定和担当吸引。',
+      highlights: ['果断有魄力', '保护欲强', '目标感十足', '天生领导者'],
+      weakness: '偶尔有些强势，不擅长示弱，容易让人感到距离感。',
+      match: '欣赏你、也敢对你直说的坚定温柔型；想被保护，也愿意反过来接住你的人。'
+    },
+    B: {
+      cls: 'r-galpha', en: 'Gentle Alpha', name: '温和Alpha',
+      pheromone: '雨后柏木', img: 'https://aka.doubaocdn.com/s/2bC9bpeaiV',
+      copy: '雨后柏木的气息，温润沉静，带着安定的力量。你是那种温柔而有力量的人——不张扬，却有担当；不强势，却能把事情稳稳扛起。靠近你，像靠着一棵安静的大树。',
+      highlights: ['温柔而坚定', '边界感清晰', '行动力强', '让人安心'],
+      weakness: '习惯自己扛事，偶尔忘了自己也需要被照顾。',
+      match: '同样温柔又有主见的人；愿意与你并肩，也懂得接住你的人。'
+    },
+    C: {
+      cls: 'r-beta', en: 'Beta', name: 'Beta',
+      pheromone: '白茶', img: 'https://aka.doubaocdn.com/s/HObDnhsdID',
+      copy: '白茶清香，干净平和，不急不躁。你是人群里最舒服的存在——稳定、理性、情绪稳，能把平凡日子过出踏实的温度。你不争不抢，却总能让人感到自在。',
+      highlights: ['情绪稳定', '随和好相处', '适应力强', '务实可靠'],
+      weakness: '偶尔过于平淡，不习惯主动表达情感需求。',
+      match: '愿意陪你细水长流的人；欣赏稳定，也愿意为生活添一点波澜的人。'
+    },
+    D: {
+      cls: 'r-omega', en: 'Omega', name: 'Omega',
+      pheromone: '白桃茉莉', img: 'https://aka.doubaocdn.com/s/kmlsDeMy8R',
+      copy: '白桃茉莉，甜软清新，像春天最温柔的一阵风。你的感知力细腻，共情力惊人，会认真记住每个人的喜好和情绪。你柔软又浪漫，值得被这个世界温柔以待。',
+      highlights: ['共情力强', '细腻浪漫', '敏锐温柔', '治愈力满分'],
+      weakness: '容易过度在意他人感受，需要更多安全感。',
+      match: '坚定而专一的人；能给你满满偏爱和安全感的人。'
+    }
+  };
+  var RESULT_KEYS = ['A', 'B', 'C', 'D'];
+  var TYPE_NAMES = { A: 'Alpha', B: '温和Alpha', C: 'Beta', D: 'Omega' };
+
+  /* ============ 路由与视图 ============ */
+  var views = Array.prototype.slice.call(document.querySelectorAll('.view'));
+  function go(route) {
+    views.forEach(function (v) {
+      v.classList.toggle('active', v.dataset.route === route);
+      v.scrollTop = 0;
+    });
+  }
+  function currentRoute() {
+    var h = location.hash || '#/cover';
+    return h.replace('#/', '');
+  }
+
+  /* ============ 答题状态 ============ */
+  var quiz = { idx: 0, answers: [], selected: null, locked: false };
+  var quizBody = document.getElementById('quizBody');
+  var btnNext = document.getElementById('btnNext');
+  var quizCount = document.getElementById('quizCount');
+  var quizProgress = document.getElementById('quizProgress');
+
+  function renderQuestion() {
+    var item = QUESTIONS[quiz.idx];
+    var card = document.createElement('div');
+    card.className = 'q-card entering';
+    card.id = 'qCard';
+
+    var no = document.createElement('div');
+    no.className = 'q-no';
+    no.textContent = 'Q.' + String(quiz.idx + 1).padStart(2, '0');
+    card.appendChild(no);
+
+    var text = document.createElement('h2');
+    text.className = 'q-text';
+    text.textContent = item.q;
+    card.appendChild(text);
+
+    var opts = document.createElement('div');
+    opts.className = 'q-options';
+    item.options.forEach(function (opt, i) {
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'q-opt';
+      if (quiz.answers[quiz.idx] === opt.t) b.classList.add('selected');
+      b.setAttribute('data-type', opt.t);
+
+      var key = document.createElement('span');
+      key.className = 'key';
+      key.textContent = String.fromCharCode(65 + i);
+      b.appendChild(key);
+
+      var txt = document.createElement('span');
+      txt.textContent = opt.text;
+      b.appendChild(txt);
+
+      b.addEventListener('click', function () {
+        if (quiz.locked) return;
+        selectOption(opt.t, card);
+      });
+      opts.appendChild(b);
+    });
+    card.appendChild(opts);
+
+    quizBody.appendChild(card);
+    setTimeout(function () { card.classList.remove('entering'); }, 30);
+
+    // 已有作答则恢复选中状态并解锁下一题
+    quiz.selected = quiz.answers[quiz.idx] || null;
+    updateNext();
+    updateProgress();
+  }
+
+  function selectOption(type, card) {
+    quiz.selected = type;
+    var all = card.querySelectorAll('.q-opt');
+    all.forEach(function (b) {
+      b.classList.toggle('selected', b.getAttribute('data-type') === type);
+    });
+    updateNext();
+  }
+
+  function updateNext() {
+    var isLast = quiz.idx === QUESTIONS.length - 1;
+    btnNext.textContent = isLast ? '查看结果' : '下一题';
+    btnNext.disabled = quiz.selected === null;
+  }
+
+  function updateProgress() {
+    var n = quiz.idx + 1;
+    quizCount.textContent = 'Q' + String(n).padStart(2, '0') + ' / 15';
+    quizProgress.style.width = (n / QUESTIONS.length * 100) + '%';
+  }
+
+  function nextQuestion() {
+    if (quiz.locked || quiz.selected === null) return;
+    quiz.answers[quiz.idx] = quiz.selected;
+    quiz.locked = true;
+
+    if (quiz.idx === QUESTIONS.length - 1) {
+      showResult();
+      return;
+    }
+
+    var card = document.getElementById('qCard');
+    card.classList.remove('entering');
+    card.classList.add('leaving');
+    setTimeout(function () {
+      quiz.idx += 1;
+      quizBody.innerHTML = '';
+      renderQuestion();
+      quiz.locked = false;
+    }, 220);
+  }
+
+  function resetQuiz() {
+    quiz.idx = 0;
+    quiz.answers = [];
+    quiz.selected = null;
+    quiz.locked = false;
+    quizBody.innerHTML = '';
+    quizProgress.style.width = '0%';
+  }
+
+  /* ============ 结果页渲染 ============ */
+  function showResult() {
+    var counts = { A: 0, B: 0, C: 0, D: 0 };
+    quiz.answers.forEach(function (t) { counts[t] += 1; });
+
+    // 最多者即结果；并列时按 A > B > C > D 的优先级取
+    var resultKey = RESULT_KEYS[0];
+    var maxCount = -1;
+    RESULT_KEYS.forEach(function (k) {
+      if (counts[k] > maxCount) { maxCount = counts[k]; resultKey = k; }
+    });
+
+    var r = RESULTS[resultKey];
+    var wrap = document.getElementById('resultWrap');
+    wrap.className = 'result-wrap ' + r.cls;
+    wrap.innerHTML = '';
+
+    var tag = document.createElement('p');
+    tag.className = 'result-tag';
+    tag.innerHTML = '你的属性是 <span>' + r.name + '</span>';
+    wrap.appendChild(tag);
+
+    var name = document.createElement('h2');
+    name.className = 'result-name';
+    name.textContent = r.name;
+    wrap.appendChild(name);
+
+    var en = document.createElement('p');
+    en.className = 'result-en';
+    en.textContent = r.en;
+    wrap.appendChild(en);
+
+    var img = document.createElement('img');
+    img.className = 'result-img';
+    img.src = r.img;
+    img.alt = r.pheromone + '插画';
+    wrap.appendChild(img);
+
+    var phe = document.createElement('div');
+    phe.className = 'phe-card';
+    phe.innerHTML =
+      '<span class="phe-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c3.5 4.2 6 7.3 6 10.5A6 6 0 0 1 6 13.5C6 10.3 8.5 7.2 12 3z"/><path d="M10 13.5c1.2 1.4 2.9 2.1 4.8 2"/></svg></span>' +
+      '<div><div class="phe-label">专属信息素</div><div class="phe-name">' + r.pheromone + '</div></div>';
+    wrap.appendChild(phe);
+
+    var copy = document.createElement('p');
+    copy.className = 'result-copy';
+    copy.textContent = r.copy;
+    wrap.appendChild(copy);
+
+    // 性格亮点
+    var sec1 = document.createElement('div');
+    sec1.className = 'r-section';
+    sec1.innerHTML = '<div class="r-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.2 5.1 5.6.6-4.2 3.7 1.2 5.5L12 15l-4.8 2.9 1.2-5.5L4.2 8.7l5.6-.6L12 3z"/></svg>性格亮点</div>' +
+      '<div class="chip-row">' + r.highlights.map(function (h) { return '<span class="chip">' + h + '</span>'; }).join('') + '</div>';
+    wrap.appendChild(sec1);
+
+    // 小短板
+    var sec2 = document.createElement('div');
+    sec2.className = 'r-section';
+    sec2.innerHTML = '<div class="r-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12c3.5-6 7.5-9 10-9s6.5 3 10 9c-3.5 6-7.5 9-10 9S5.5 18 2 12z"/><circle cx="12" cy="12" r="3.2"/></svg>小短板</div>' +
+      '<div class="r-line">' + r.weakness + '</div>';
+    wrap.appendChild(sec2);
+
+    // 适合相处模式
+    var sec3 = document.createElement('div');
+    sec3.className = 'r-section';
+    sec3.innerHTML = '<div class="r-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.5C7 16.5 3.5 13.3 3.5 9.8A4.3 4.3 0 0 1 7.8 5.5c1.7 0 3.2.9 4.2 2.4 1-1.5 2.5-2.4 4.2-2.4a4.3 4.3 0 0 1 4.3 4.3c0 3.5-3.5 6.7-8.5 10.7z"/></svg>适合相处模式</div>' +
+      '<div class="r-line">' + r.match + '</div>';
+    wrap.appendChild(sec3);
+
+    // 答案分布
+    var dist = document.createElement('div');
+    dist.className = 'dist-card';
+    var distHtml = '<div class="dist-title">你的答案分布</div>';
+    RESULT_KEYS.forEach(function (k) {
+      var fill = '#D8CCB8';
+      if (k === 'A') fill = '#7E9686';
+      if (k === 'B') fill = '#A3936F';
+      if (k === 'C') fill = '#9AAE93';
+      if (k === 'D') fill = '#D9A290';
+      distHtml += '<div class="dist-row">' +
+        '<span class="dist-label">' + TYPE_NAMES[k] + '</span>' +
+        '<div class="dist-track"><div class="dist-fill" data-w="' + (counts[k] / 15 * 100) + '" style="width:0%;background:' + fill + '"></div></div>' +
+        '<span class="dist-num">' + counts[k] + '</span>' +
+        '</div>';
+    });
+    dist.innerHTML = distHtml;
+    wrap.appendChild(dist);
+
+    // 操作按钮
+    var actions = document.createElement('div');
+    actions.className = 'result-actions';
+    actions.innerHTML =
+      '<button class="btn btn-block" id="btnAgain">重新测试</button>' +
+      '<button class="btn-ghost" id="btnBack"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>返回首页</button>' +
+      '<p class="result-note">结果仅供娱乐参考 · 每一种属性都值得被喜欢</p>';
+    wrap.appendChild(actions);
+
+    document.getElementById('btnAgain').addEventListener('click', function () {
+      resetQuiz();
+      go('cover');
+      location.hash = '#/cover';
+    });
+    document.getElementById('btnBack').addEventListener('click', function () {
+      resetQuiz();
+      go('cover');
+      location.hash = '#/cover';
+    });
+
+    // 分布条动画
+    setTimeout(function () {
+      dist.querySelectorAll('.dist-fill').forEach(function (f) {
+        f.style.width = f.getAttribute('data-w') + '%';
+      });
+    }, 150);
+
+    go('result');
+    location.hash = '#/result';
+  }
+
+  /* ============ 事件绑定 ============ */
+  document.getElementById('btnStart').addEventListener('click', function () {
+    resetQuiz();
+    renderQuestion();
+    go('quiz');
+    location.hash = '#/quiz';
+  });
+  btnNext.addEventListener('click', nextQuestion);
+
+  window.addEventListener('hashchange', function () {
+    var r = currentRoute();
+    if (r === 'quiz') {
+      // 已全部答完再回到答题页时，从头开始
+      if (quiz.answers.length >= QUESTIONS.length) { resetQuiz(); }
+      if (quizBody.children.length === 0) { renderQuestion(); }
+      go('quiz');
+    } else if (r === 'result') {
+      go('result');
+    } else {
+      go('cover');
+    }
+  });
+
+  /* ============ 初始化 ============ */
+  go(currentRoute());
+})();
+</script>
+</body>
+</html>
